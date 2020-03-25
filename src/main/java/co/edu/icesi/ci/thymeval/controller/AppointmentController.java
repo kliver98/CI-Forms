@@ -41,21 +41,23 @@ public class AppointmentController {
 	@GetMapping("/apps/add")
 	public String addApp(Model model,  @ModelAttribute("app") Appointment appointment) {
 		model.addAttribute("app", new Appointment());
-
 		model.addAttribute("doctors", userService.findAllDoctors());
 		model.addAttribute("patients", userService.findAllPatients());
 		return "apps/add-app";
 	}
 
 	@PostMapping("/apps/add")
-	public String saveApp( @Validated @RequestParam(value = "action", required = true)  String action, Appointment app, BindingResult bindingResult) {
+	public String saveApp( @RequestParam(value = "action", required = true)  String action, 
+			@Validated @ModelAttribute("app") Appointment app, BindingResult bindingResult, Model model) {
 		if (!action.equals("Cancel"))
 		{
-			 if (bindingResult.hasErrors()) {
-				 return "apps/index";
-				 }else {
-					 appointmentService.save(app);
-				 }
+			if (bindingResult.hasErrors()) {
+				model.addAttribute("doctors", userService.findAllDoctors());
+				model.addAttribute("patients", userService.findAllPatients());
+				return "apps/add-app";
+			} else {
+				appointmentService.save(app);
+			}
 		}
 			
 		return "redirect:/apps/";

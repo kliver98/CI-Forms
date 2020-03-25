@@ -26,23 +26,23 @@ public class User {
 	@GeneratedValue(strategy= GenerationType.AUTO)
 	private long id;
 	
-	@NotNull
-	@Size(min=2)
+	@NotNull(message="No puede ser nulo.")
+	@Size(min=2,message="Debe tener al menos 2 caracteres.")
 	private String name;
 	
-	@NotBlank
-	@Email
+	@NotBlank(message="No puede ser blanco.")
+	@Email(message="Debe ser un correo electrónico válido.")
 	private String email;
 	
-	@NotNull
+	@NotNull(message="No puede ser vacío.")
 	private UserType type;
 	
 	@NotNull
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Past(message="La fecha debe ser anterior a hoy.")
+	@Past(message="La fecha debe ser anterior a la de hoy.")
 	private LocalDate birthDate;
 	
-	@NotNull
+	@NotNull(message="No puede ser vacío.")
 	private UserGender gender;
 	
 //	@OneToMany

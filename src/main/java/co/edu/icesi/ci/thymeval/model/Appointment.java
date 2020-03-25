@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,15 +27,16 @@ public class Appointment {
 	@GeneratedValue(strategy= GenerationType.AUTO)
 	private long id;
 	
-	@NotNull
+	@NotNull(message="La fecha no puede estar vacía.")
+	@FutureOrPresent(message="La fecha debe ser del día de hoy o futura.")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
 	
-	@NotNull
+	@NotNull(message="La hora no puede estar vacía.")
 	@DateTimeFormat(iso = ISO.TIME)
 	private LocalTime time;
 	
-	@NotNull
+	@NotNull(message="Debe seleccionar un paciente")
 	@ManyToOne
 	private User patient;
 	

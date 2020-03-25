@@ -45,18 +45,19 @@ public class UserController {
 	}
 
 	@PostMapping("/users/add")
-	public String saveUser(@RequestParam(value = "action", required = true) String action, @Validated User user,
-			BindingResult bindingResult, Model model) {
-		if (!action.equals("Cancel")) {
-			if (bindingResult.hasErrors()) {
-				model.addAttribute("genders", userService.getGenders());
-				model.addAttribute("types", userService.getTypes());
-				model.addAttribute("users", userService.findAll());
-				return "/users/add-user";
-			} else {
-				userService.save(user);
-			}
-		}
+	public String saveUser( @RequestParam(value = "action", required = true) String action,
+			@Validated User user, BindingResult bindingResult, Model model) {
+	 if (!action.equals("Cancel"))
+	 {
+		 if(bindingResult.hasErrors()) {
+			 model.addAttribute("genders", userService.getGenders());
+			 model.addAttribute("types", userService.getTypes());
+				return "users/add-user";
+		 }else
+		 {
+			userService.save(user);
+		 }
+	 }
 		return "redirect:/users/";
 	}
 
@@ -75,9 +76,10 @@ public class UserController {
 	public String updateUser(@Validated @PathVariable("id") long id,
 			@RequestParam(value = "action", required = true) String action, User user, BindingResult bindingResult) {
 		if (action != null && !action.equals("Cancel")) {
-			if (bindingResult.hasErrors()) {
+			if(bindingResult.hasErrors()) {
 				return "/users/edit/";
-			} else {
+			}else
+			{
 				userService.save(user);
 
 			}
