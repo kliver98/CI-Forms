@@ -11,8 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -27,19 +27,20 @@ public class Appointment {
 	@GeneratedValue(strategy= GenerationType.AUTO)
 	private long id;
 	
-	@NotNull(message="La fecha no puede estar vacía.")
-	@FutureOrPresent(message="La fecha debe ser del día de hoy o futura.")
+	@NotNull
+	@FutureOrPresent(message="La fecha debe ser el día de hoy o fechas futuras.")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
 	
-	@NotNull(message="La hora no puede estar vacía.")
+	@NotNull(message="Se requiere especificar una hora.")
 	@DateTimeFormat(iso = ISO.TIME)
 	private LocalTime time;
 	
-	@NotNull(message="Debe seleccionar un paciente")
+	@NotNull(message="Se requiere especificar el nombre del paciente.")
 	@ManyToOne
 	private User patient;
 	
+	@NotNull(message="Se requiere especificar el nombre del doctor.")
 	@ManyToOne
 	private User doctor;
 }

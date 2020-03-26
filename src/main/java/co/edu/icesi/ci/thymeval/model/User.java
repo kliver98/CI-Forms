@@ -26,23 +26,31 @@ public class User {
 	@GeneratedValue(strategy= GenerationType.AUTO)
 	private long id;
 	
-	@NotNull(message="No puede ser nulo.")
-	@Size(min=2,message="Debe tener al menos 2 caracteres.")
+	@NotBlank(groups=User1.class)
+	@Size(message="La contraseña debe tener minimo ocho caracteres", min=8, groups = User1.class)
+	private String password;
+	
+	@NotBlank(groups=User1.class)
+	@Size(message="El username debe tener minimo tres caracteres", min=3, groups=User1.class)
+	private String username;
+	
+	@NotBlank(groups=User2.class)
+	@Size(message="El nombre debe tener minimo dos caracteres", min=2, groups=User2.class)
 	private String name;
 	
-	@NotBlank(message="No puede ser blanco.")
-	@Email(message="Debe ser un correo electrónico válido.")
+	@NotBlank(groups = User2.class)
+	@Email(message= "Debes ingresar un correo valido", groups = User2.class)
 	private String email;
 	
-	@NotNull(message="No puede ser vacío.")
+	@NotNull(groups=User2.class)
 	private UserType type;
 	
-	@NotNull
+	@NotNull(groups=User1.class)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Past(message="La fecha debe ser anterior a la de hoy.")
+	@Past(message="La fecha debe ser anterior a hoy.", groups = User1.class)
 	private LocalDate birthDate;
 	
-	@NotNull(message="No puede ser vacío.")
+	@NotNull(groups=User2.class)
 	private UserGender gender;
 	
 //	@OneToMany

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import co.edu.icesi.ci.thymeval.model.Appointment;
+import co.edu.icesi.ci.thymeval.model.User;
 import co.edu.icesi.ci.thymeval.service.AppointmentService;
 import co.edu.icesi.ci.thymeval.service.AppointmentServiceInt;
 import co.edu.icesi.ci.thymeval.service.UserService;
@@ -41,23 +42,26 @@ public class AppointmentController {
 	@GetMapping("/apps/add")
 	public String addApp(Model model,  @ModelAttribute("app") Appointment appointment) {
 		model.addAttribute("app", new Appointment());
+
 		model.addAttribute("doctors", userService.findAllDoctors());
 		model.addAttribute("patients", userService.findAllPatients());
 		return "apps/add-app";
 	}
 
+	
+	
 	@PostMapping("/apps/add")
-	public String saveApp( @RequestParam(value = "action", required = true)  String action, 
-			@Validated @ModelAttribute("app") Appointment app, BindingResult bindingResult, Model model) {
+	public String saveApp( @RequestParam(value = "action", required = true)  String action, @Validated @ModelAttribute("app") Appointment app, BindingResult bindingResult, Model model) {
 		if (!action.equals("Cancel"))
 		{
-			if (bindingResult.hasErrors()) {
-				model.addAttribute("doctors", userService.findAllDoctors());
+			 if (bindingResult.hasErrors()) {
+				 model.addAttribute("doctors", userService.findAllDoctors());
 				model.addAttribute("patients", userService.findAllPatients());
-				return "apps/add-app";
-			} else {
-				appointmentService.save(app);
-			}
+				model.addAttribute("appoinments", appointmentService.findAll());
+					return "apps/add-app";
+				 }else {
+					 appointmentService.save(app);
+				 }
 		}
 			
 		return "redirect:/apps/";

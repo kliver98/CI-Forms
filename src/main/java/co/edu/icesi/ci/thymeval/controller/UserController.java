@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import co.edu.icesi.ci.thymeval.model.User;
+import co.edu.icesi.ci.thymeval.model.User1;
+import co.edu.icesi.ci.thymeval.model.User2;
 import co.edu.icesi.ci.thymeval.service.UserService;
 
 @Controller
@@ -36,28 +38,68 @@ public class UserController {
 		return "users/index";
 	}
 
-	@GetMapping("/users/add")
-	public String addUser(Model model) {
+	
+	
+	@GetMapping("/users/add1")
+	public String addUser1(Model model) {
 		model.addAttribute("user", new User());
-		model.addAttribute("genders", userService.getGenders());
-		model.addAttribute("types", userService.getTypes());
-		return "users/add-user";
+		return "users/add-user1";
+	}
+	
+	@PostMapping("users/add1")
+	public String saveUser1(@RequestParam(value = "action", required = true) String action, @Validated(User1.class) User user,
+			BindingResult bindingResult, Model model)
+	{
+		if(!action.equals("Cancel"))
+		{
+			if(bindingResult.hasErrors())
+			{
+				return "users/add-user1";
+			}else
+			{
+				userService.save(user);
+				model.addAttribute("user",user);
+				model.addAttribute("genders", userService.getGenders());
+				model.addAttribute("types", userService.getTypes());
+			}
+		}
+		
+		return "users/add-user2";		
 	}
 
-	@PostMapping("/users/add")
-	public String saveUser( @RequestParam(value = "action", required = true) String action,
-			@Validated User user, BindingResult bindingResult, Model model) {
-	 if (!action.equals("Cancel"))
-	 {
-		 if(bindingResult.hasErrors()) {
-			 model.addAttribute("genders", userService.getGenders());
-			 model.addAttribute("types", userService.getTypes());
-				return "users/add-user";
-		 }else
-		 {
-			userService.save(user);
-		 }
-	 }
+	
+
+	
+	//EN ESTA SE NECESITA EL ID, CAMPO NO TEXTO, QUE NO SE CAMBIE Y QUE NO SEA VISIBLE
+/**
+		@GetMapping("/users/add2/{id}")
+		public String addUser2(@PathVariable("id") long id, Model model) {
+			Optional<User> user = userService.findById(id);
+			if (user == null)
+				throw new IllegalArgumentException("Invalid user Id:" + id);
+			model.addAttribute(user);
+			model.addAttribute("genders", userService.getGenders());
+			model.addAttribute("types", userService.getTypes());
+			return "users/add-user2";
+		}**/
+	//EN ESTA SE NECESITA EL ID
+
+	@PostMapping("/users/add2/{id}")
+	public String saveUser(@PathVariable("id") long id,@RequestParam(value = "action", required = true) String action, @Validated(User2.class) User user,
+			BindingResult bindingResult, Model model) {
+		Optional<User> user1 = userService.findById(id);
+		if (user == null)
+			throw new IllegalArgumentException("Invalid user Id:" + id);
+		if (!action.equals("Cancel")) {
+			if (bindingResult.hasErrors()) {
+				model.addAttribute("genders", userService.getGenders());
+				model.addAttribute("types", userService.getTypes());
+				model.addAttribute("users", userService.findAll());
+				return "/users/add-user";
+			} else {
+				userService.save(user);
+			}
+		}
 		return "redirect:/users/";
 	}
 
@@ -76,10 +118,9 @@ public class UserController {
 	public String updateUser(@Validated @PathVariable("id") long id,
 			@RequestParam(value = "action", required = true) String action, User user, BindingResult bindingResult) {
 		if (action != null && !action.equals("Cancel")) {
-			if(bindingResult.hasErrors()) {
+			if (bindingResult.hasErrors()) {
 				return "/users/edit/";
-			}else
-			{
+			} else {
 				userService.save(user);
 
 			}
