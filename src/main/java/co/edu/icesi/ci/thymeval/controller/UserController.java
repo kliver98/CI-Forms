@@ -20,6 +20,7 @@ import co.edu.icesi.ci.thymeval.model.User;
 import co.edu.icesi.ci.thymeval.model.User1;
 import co.edu.icesi.ci.thymeval.model.User2;
 import co.edu.icesi.ci.thymeval.service.UserService;
+import lombok.var;
 
 @Controller
 public class UserController {
@@ -57,14 +58,19 @@ public class UserController {
 				return "users/add-user1";
 			}else
 			{
+				System.out.println(user);
 				userService.save(user);
+				System.out.println(user);
 				model.addAttribute("user",user);
 				model.addAttribute("genders", userService.getGenders());
 				model.addAttribute("types", userService.getTypes());
+				return "users/add-user2";	
 			}
+		}else {
+			return "users/index";
 		}
 		
-		return "users/add-user2";		
+			
 	}
 
 	
@@ -84,19 +90,21 @@ public class UserController {
 		}**/
 	//EN ESTA SE NECESITA EL ID
 
-	@PostMapping("/users/add2/{id}")
-	public String saveUser(@PathVariable("id") long id,@RequestParam(value = "action", required = true) String action, @Validated(User2.class) User user,
+	@PostMapping("/users/add2/")
+	public String saveUser(@RequestParam(value = "action", required = true) String action, @Validated(User2.class) User user,
 			BindingResult bindingResult, Model model) {
-		Optional<User> user1 = userService.findById(id);
+		System.out.println(user);
 		if (user == null)
-			throw new IllegalArgumentException("Invalid user Id:" + id);
+			throw new IllegalArgumentException("Invalid User");
 		if (!action.equals("Cancel")) {
 			if (bindingResult.hasErrors()) {
 				model.addAttribute("genders", userService.getGenders());
 				model.addAttribute("types", userService.getTypes());
-				model.addAttribute("users", userService.findAll());
-				return "/users/add-user";
+				return "/users/add-user2";
 			} else {
+				var userSaved=userService.findById(user.getId()).get();
+				user.setUsername(userSaved.getUsername());
+				user.setPassword(userSaved.getPassword());
 				userService.save(user);
 			}
 		}

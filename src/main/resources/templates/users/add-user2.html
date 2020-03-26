@@ -20,62 +20,65 @@
 		<h2 class="mb-5">New User</h2>
 		<div class="row">
 			<div class="col-md-6">
-				<form action="#" th:action="@{/users/add2/{id}(id=${user.id})}" th:object="${user}"
+				<form action="#" th:action="@{/users/add2/}" th:object="${user}"
 					method="post">
-					<div class="row">
-					
-				
-						
-						<div class="form-group col-md-6">
-							 <input
-								type="hidden" th:field="*{id}" class="form-control" id="id"
-								placeholder="Id"> 
+
+					<p th:text="*{username}"></p>
+					<p th:text="*{password}"></p>
+
+					<div class="col">
+
+
+						<div class="row">
+							<div class="form-group col-md-6">
+								<input type="hidden" th:field="*{id}" class="form-control"
+									id="id" placeholder="Id">
+							</div>
 						</div>
-						
-						
-						<div class="form-group col-md-6">
-							<label for="name" class="col-form-label">Name</label> 
-							<br>
-							<span th:if="${#fields.hasErrors('name')}"
-								th:errors="*{name}" class="text-danger"></span>
-							<input
-								type="text" th:field="*{name}" class="form-control" id="name"
-								placeholder="Name">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="name" class="col-form-label">Name</label> <br>
+								<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+									class="text-danger"></span> <input type="text"
+									th:field="*{name}" class="form-control" id="name"
+									placeholder="Name">
+							</div>
 						</div>
-						<div class="form-group col-md-6">
-							<label for="email" class="col-form-label">Email</label>
-							<br>
-							<span th:if="${#fields.hasErrors('email')}"
-								th:errors="*{email}" class="text-danger"></span>
-							 <input
-								type="text" th:field="*{email}" class="form-control" id="email"
-								placeholder="Email">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="email" class="col-form-label">Email</label> <br>
+								<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+									class="text-danger"></span> <input type="email"
+									th:field="*{email}" class="form-control" id="email"
+									placeholder="Email">
+							</div>
 						</div>
-						<div class="form-group col-md-6">
-						
-							<label for="type" class="col-form-label">Type</label> 
-							<br>
-							<span th:if="${#fields.hasErrors('type')}"
-								th:errors="*{type}" class="text-danger"></span>
-							<select
-								class="form-control-range" th:field="*{type}">
-								<option th:each="tp : ${types}" th:value="${tp}"
-									class="form-control" th:text="${tp}"
-									th:selected="${user.type=tp}"></option>
-							</select>
+						<div class="row">
+							<div class="form-group col-md-6">
+
+								<label for="type" class="col-form-label">Type</label> <br>
+								<span th:if="${#fields.hasErrors('type')}" th:errors="*{type}"
+									class="text-danger"></span> <select class="form-control-range"
+									th:field="*{type}">
+									<option th:each="tp : ${types}" th:value="${tp}"
+										class="form-control" th:text="${tp}"
+										th:selected="${user.type=tp}"></option>
+								</select>
+							</div>
 						</div>
-						<div class="form-group col-md-6">
-							<label for="gender" class="col-form-label">Gender</label>
-							<br>
-							<span th:if="${#fields.hasErrors('gender')}"
-								th:errors="*{gender}" class="text-danger"></span>
-							 <select
-								class="form-control-range" th:field="*{gender}">
-								<option th:each="gen : ${genders}" th:value="${gen}"
-									class="form-control" th:text="${gen}"
-									th:selected="${user.gender=gen}"></option>
-							</select>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="gender" class="col-form-label">Gender</label> <br>
+								<span th:if="${#fields.hasErrors('gender')}"
+									th:errors="*{gender}" class="text-danger"></span> <select
+									class="form-control-range" th:field="*{gender}">
+									<option th:each="gen : ${genders}" th:value="${gen}"
+										class="form-control" th:text="${gen}"
+										th:selected="${user.gender=gen}"></option>
+								</select>
+							</div>
 						</div>
+						<!-- <div class="row">
 						<div class="form-group col-md-6">
 
 
@@ -86,6 +89,9 @@
 								type="date" th:field="*{birthDate}" class="form-control"
 								id="birthDate" placeholder="01/01/2000">
 						</div>
+						</div> -->
+						<input type="hidden" th:field="*{birthDate}" class="form-control"
+							id="birthDate" placeholder="01/01/2000">
 					</div>
 					<div class="row">
 						<div class="col-md-4 mt-3">

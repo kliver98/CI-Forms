@@ -27,7 +27,7 @@ public class User {
 	private long id;
 	
 	@NotBlank(groups=User1.class)
-	@Size(message="La contraseÃ±a debe tener minimo ocho caracteres", min=8, groups = User1.class)
+	@Size(message="La contraseña debe tener minimo ocho caracteres", min=8, groups = User1.class)
 	private String password;
 	
 	@NotBlank(groups=User1.class)
