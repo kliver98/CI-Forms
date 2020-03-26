@@ -114,6 +114,7 @@ public class UserController {
 	@GetMapping("/users/edit/{id}")
 	public String showUpdateForm(@PathVariable("id") long id, Model model) {
 		Optional<User> user = userService.findById(id);
+		System.out.println("Guradando... -> "+user.get().getUsername()+" - "+user.get().getPassword());
 		if (user == null)
 			throw new IllegalArgumentException("Invalid user Id:" + id);
 		model.addAttribute("user", user.get());
@@ -129,8 +130,10 @@ public class UserController {
 			if (bindingResult.hasErrors()) {
 				return "/users/edit/";
 			} else {
+				User original = userService.findById(user.getId()).get();
+				user.setUsername(original.getUsername());
+				user.setPassword(original.getPassword());
 				userService.save(user);
-
 			}
 		}
 		return "redirect:/users/";
