@@ -34,7 +34,7 @@
 								class="form-control-range" th:field="*{type}">
 								<option th:each="tp : ${types}" th:value="${tp}"
 									class="form-control" th:text="${tp}"
-									th:selected="${user.type}"></option>
+									th:selected="${user.type=tp}"></option>
 							</select>
 						</div>
 						<div class="form-group col-md-6">
@@ -42,7 +42,7 @@
 								class="form-control-range" th:field="*{gender}">
 								<option th:each="gen : ${genders}" th:value="${gen}"
 									class="form-control" th:text="${gen}"
-									th:selected="${user.gender}"></option>
+									th:selected="${user.gender=gen}"></option>
 							</select>
 						</div>
 						<div class="form-group col-md-6">

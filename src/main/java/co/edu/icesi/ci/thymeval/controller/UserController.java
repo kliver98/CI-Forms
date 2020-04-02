@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import co.edu.icesi.ci.thymeval.model.User;
+import co.edu.icesi.ci.thymeval.model.UserApp;
 import co.edu.icesi.ci.thymeval.model.User1;
 import co.edu.icesi.ci.thymeval.model.User2;
 import co.edu.icesi.ci.thymeval.service.UserService;
@@ -32,6 +32,29 @@ public class UserController {
 		this.userService = userService;
 		;
 	}
+	
+	
+	@GetMapping("/")
+	public String home() {
+		return "index"
+;	}
+	
+	@GetMapping("/login")
+	public String login() {
+//		model.addAttribute("user","");
+		return "/login";
+	}
+	
+//	@PostMapping("/login")
+//	public String loginPost(@RequestParam(value = "action", required = true) String action, @Validated(User1.class) UserApp user,
+//			BindingResult bindingResult, Model model) {
+//		if(bindingResult.hasErrors()) {
+//			model
+//		}else {
+//			
+//			return "/index";
+//		}
+//	}
 
 	@GetMapping("/users/")
 	public String indexUser(Model model) {
@@ -43,12 +66,12 @@ public class UserController {
 	
 	@GetMapping("/users/add1")
 	public String addUser1(Model model) {
-		model.addAttribute("user", new User());
+		model.addAttribute("user", new UserApp());
 		return "users/add-user1";
 	}
 	
 	@PostMapping("users/add1")
-	public String saveUser1(@RequestParam(value = "action", required = true) String action, @Validated(User1.class) User user,
+	public String saveUser1(@RequestParam(value = "action", required = true) String action, @Validated(User1.class) UserApp user,
 			BindingResult bindingResult, Model model)
 	{
 		if(!action.equals("Cancel"))
@@ -67,7 +90,7 @@ public class UserController {
 				return "users/add-user2";	
 			}
 		}else {
-			return "users/index";
+			return "redirect:/users/";
 		}
 		
 			
@@ -91,7 +114,7 @@ public class UserController {
 	//EN ESTA SE NECESITA EL ID
 
 	@PostMapping("/users/add2/")
-	public String saveUser(@RequestParam(value = "action", required = true) String action, @Validated(User2.class) User user,
+	public String saveUser(@RequestParam(value = "action", required = true) String action, @Validated(User2.class) UserApp user,
 			BindingResult bindingResult, Model model) {
 		System.out.println(user);
 		if (user == null)
@@ -113,8 +136,7 @@ public class UserController {
 
 	@GetMapping("/users/edit/{id}")
 	public String showUpdateForm(@PathVariable("id") long id, Model model) {
-		Optional<User> user = userService.findById(id);
-		System.out.println("Guradando... -> "+user.get().getUsername()+" - "+user.get().getPassword());
+		Optional<UserApp> user = userService.findById(id);
 		if (user == null)
 			throw new IllegalArgumentException("Invalid user Id:" + id);
 		model.addAttribute("user", user.get());
@@ -125,15 +147,13 @@ public class UserController {
 
 	@PostMapping("/users/edit/{id}")
 	public String updateUser(@Validated @PathVariable("id") long id,
-			@RequestParam(value = "action", required = true) String action, User user, BindingResult bindingResult) {
+			@RequestParam(value = "action", required = true) String action, UserApp user, BindingResult bindingResult) {
 		if (action != null && !action.equals("Cancel")) {
 			if (bindingResult.hasErrors()) {
 				return "/users/edit/";
 			} else {
-				User original = userService.findById(user.getId()).get();
-				user.setUsername(original.getUsername());
-				user.setPassword(original.getPassword());
 				userService.save(user);
+
 			}
 		}
 		return "redirect:/users/";
@@ -141,7 +161,7 @@ public class UserController {
 
 	@GetMapping("/users/del/{id}")
 	public String deleteUser(@PathVariable("id") long id) {
-		User user = userService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+		UserApp user = userService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
 		userService.delete(user);
 		return "redirect:/users/";
 	}

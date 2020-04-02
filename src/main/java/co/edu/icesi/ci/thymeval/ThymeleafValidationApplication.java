@@ -10,7 +10,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
-import co.edu.icesi.ci.thymeval.model.User;
+import co.edu.icesi.ci.thymeval.model.UserApp;
 import co.edu.icesi.ci.thymeval.model.UserGender;
 import co.edu.icesi.ci.thymeval.model.UserType;
 import co.edu.icesi.ci.thymeval.service.UserService;
@@ -33,21 +33,35 @@ public class ThymeleafValidationApplication {
 		
 		ConfigurableApplicationContext c = SpringApplication.run(ThymeleafValidationApplication.class, args);
 		UserService u = c.getBean(UserService.class);
-		User user1 = new User();
+		UserApp admin = new UserApp();
 		Date b = new Date(2323223232L);
+		admin.setName("admin");
+		admin.setEmail("admin@gmail.com");
+		admin.setGender(UserGender.masculine);
+		admin.setType(UserType.ADMIN);
+		admin.setBirthDate(convertToLocalDateViaInstant(b));
+		admin.setPassword("{noop}admin");
+		admin.setUsername("admin");
+		u.save(admin);
+		UserApp user1 = new UserApp();
+		b = new Date(2323223232L);
 		user1.setName("Juan");
 		user1.setEmail("jc@gmail.com");
 		user1.setGender(UserGender.femenine);
 		user1.setType(UserType.doctor);
 		user1.setBirthDate(convertToLocalDateViaInstant(b));
+		user1.setPassword("{noop}asd");
+		user1.setUsername("asd");
 		u.save(user1);
-		User user2 = new User();
-		Date a = new Date(2323223232L);
-		user2.setGender(UserGender.femenine);
-		user2.setName("Ana");
-		user2.setEmail("ana@gmail.com");
+		UserApp user2 = new UserApp();
+		b = new Date(2323223232L);
+		user2.setName("Patient");
+		user2.setEmail("pttc@gmail.com");
+		user2.setGender(UserGender.masculine);
 		user2.setType(UserType.patient);
-		user2.setBirthDate(convertToLocalDateViaInstant(a));
+		user2.setBirthDate(convertToLocalDateViaInstant(b));
+		user2.setPassword("{noop}qwe");
+		user2.setUsername("qwe");
 		u.save(user2);
 	}
 
