@@ -19,8 +19,8 @@
 	<div th:switch="${apps}" class="container my-5">
 		<div class="row">
 			<div class="col-md-10">
-				<h2 th:case="null">No appointments yet!</h2>
-				<div th:case="*">
+				<h2 th:if="${apps.size()==0}" class="text-danger">No appointments yet!</h2><br>
+				<div th:if="${apps.size()!=0}">
 					<h2 class="my-5">Appointments</h2>
 					<table class="table table-striped table-responsive-md">
 						<thead>
@@ -29,8 +29,8 @@
 								<th>Time</th>
 								<th>Doctor</th>
 								<th>Patient</th>
-								<th>Edit</th>
-								<th>Delete</th>
+								<th sec:authorize="hasRole('patient')">Edit</th>
+								<th sec:authorize="hasRole('patient')">Delete</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -39,20 +39,20 @@
 								<td th:text="${app.time}"></td>
 								<td th:text="${app.doctor.name}"></td>
 								<td th:text="${app.patient.name}"></td>
-								<td><a th:href="@{/apps/edit/{id}(id=${app.id})}"
+								<td  sec:authorize="hasRole('patient')"><a th:href="@{/apps/edit/{id}(id=${app.id})}"
 									class="btn btn-primary"><i class="fas fa-calendar ml-2"></i></a></td>
-								<td><a th:href="@{/apps/del/{id}(id=${app.id})}"
+								<td  sec:authorize="hasRole('patient')"><a th:href="@{/apps/del/{id}(id=${app.id})}"
 									class="btn btn-primary"><i
 										class="fas fa-calendar-times ml-2"></i></a></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-				<p class="my-5">
+				<p sec:authorize="hasRole('patient')" class="my-5">
 					<a href="/apps/add" class="btn btn-primary"><i
 						class="fas fa-calendar-plus ml-2"></i></a>
 				</p>
-				<p class="my-5">
+				<p  sec:authorize="hasRole('ADMIN')" class="my-5">
 					<a href="/users/add" class="btn btn-primary"><i
 						class="fas fa-user-plus ml-2"></i></a>
 				</p>
